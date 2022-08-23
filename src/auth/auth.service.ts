@@ -30,4 +30,22 @@ export class AuthService {
 
     return this.userService._getUserInterface(newUser);
   }
+
+  async signin(user: UserSignInDTO): Promise<{ token: string } | null> {
+    const { email, password } = user;
+
+    const existingUser = await this.userService.findByEmail(email);
+
+    if (!existingUser) return null;
+
+    const validPassword = bcrypt.compare(password, existingUser.password);
+
+    if (!validPassword) return null;
+
+    const validUser = this.userService._getUserInterface(existingUser);
+
+    const jwt = await this.jwtService.signAsync({ validUser });
+
+    return { token: jwt };
+  }
 }
