@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { exec } from 'child_process';
 import { Model } from 'mongoose';
 import { ProductDocument } from './product.schema';
 
