@@ -22,7 +22,11 @@ export class AuthService {
 
     const existingUser = await this.userService.findByEmail(email);
 
-    if (existingUser) return 'Email taken';
+    if (existingUser)
+      throw new HttpException(
+        'An account with the email already exists',
+        HttpStatus.CONFLICT,
+      );
 
     const hashedPassword = await this.hashPassword(password);
 
@@ -36,11 +40,13 @@ export class AuthService {
 
     const existingUser = await this.userService.findByEmail(email);
 
-    if (!existingUser) return null;
+    if (!existingUser)
+      throw new HttpException('Credentials invalid', HttpStatus.UNAUTHORIZED);
 
     const validPassword = bcrypt.compare(password, existingUser.password);
 
-    if (!validPassword) return null;
+    if (!validPassword)
+      throw new HttpException('Credentials invalid', HttpStatus.UNAUTHORIZED);
 
     const validUser = this.userService._getUserInterface(existingUser);
 
