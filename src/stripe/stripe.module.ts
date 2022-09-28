@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { StripeController } from './stripe.controller';
 
-@Module({})
+@Module({
+  controllers: [StripeController]
+})
 export class StripeModule {}
